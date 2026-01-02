@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "apex-trading"
+version = "1.0.0"
+description = "The Pinnacle Professional Trading Platform"
+authors = [{name = "Apex Trading Team", email = "dev@apextrading.io"}]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial :: Investment",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/apex-trading"
+Documentation = "https://docs.apextrading.io"
+Repository = "https://github.com/yourusername/apex-trading"
+Issues = "https://github.com/yourusername/apex-trading/issues"
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
