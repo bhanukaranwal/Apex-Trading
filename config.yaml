@@ -1,0 +1,169 @@
+app:
+  name: Apex Trading Platform
+  version: 1.0.0
+  environment: development
+  debug: true
+  host: 0.0.0.0
+  port: 8000
+
+security:
+  secret_key: your-secret-key-here-change-in-production
+  algorithm: HS256
+  access_token_expire_minutes: 30
+  refresh_token_expire_days: 7
+  cors_origins:
+    - http://localhost:3000
+    - http://localhost:5173
+    - https://apex.yourdomain.com
+
+database:
+  url: postgresql+asyncpg://apex:apex_secure_password@localhost:5432/apex_trading
+  pool_size: 20
+  max_overflow: 40
+  pool_timeout: 30
+  echo: false
+
+redis:
+  url: redis://:apex_redis_password@localhost:6379/0
+  max_connections: 50
+  socket_timeout: 5
+  socket_connect_timeout: 5
+
+brokers:
+  interactive_brokers:
+    enabled: true
+    host: 127.0.0.1
+    port: 7497
+    client_id: 1
+    readonly: false
+  
+  alpaca:
+    enabled: true
+    base_url: https://paper-api.alpaca.markets
+    api_key: ${ALPACA_API_KEY}
+    secret_key: ${ALPACA_SECRET_KEY}
+    paper: true
+  
+  binance:
+    enabled: true
+    api_key: ${BINANCE_API_KEY}
+    secret_key: ${BINANCE_SECRET_KEY}
+    testnet: true
+
+data_feeds:
+  polygon:
+    api_key: ${POLYGON_API_KEY}
+    tier: starter
+    websocket_url: wss://socket.polygon.io
+  
+  alpaca_data:
+    api_key: ${ALPACA_API_KEY}
+    secret_key: ${ALPACA_SECRET_KEY}
+  
+  fallback_order:
+    - polygon
+    - alpaca_data
+    - yahoo_finance
+
+execution:
+  default_order_type: limit
+  slippage_model: realistic
+  commission_model: per_share
+  commissions:
+    stocks: 0.005
+    options: 0.65
+    futures: 2.50
+    forex: 0.00002
+    crypto: 0.001
+  max_position_size: 10000
+  max_order_value: 100000
+  enable_risk_checks: true
+
+ai:
+  models:
+    price_prediction:
+      enabled: true
+      model_type: lstm
+      sequence_length: 60
+      prediction_horizon: 10
+      retrain_interval_hours: 24
+    
+    sentiment_analysis:
+      enabled: true
+      sources:
+        - twitter
+        - reddit
+        - news
+      update_interval_minutes: 5
+    
+    pattern_recognition:
+      enabled: true
+      min_confidence: 0.75
+      patterns:
+        - head_and_shoulders
+        - double_top
+        - double_bottom
+        - triangle
+        - flag
+        - wedge
+
+backtesting:
+  default_initial_capital: 100000
+  default_commission: 0.005
+  default_slippage: 0.001
+  parallel_workers: 8
+  cache_results: true
+  max_cached_results: 1000
+
+risk:
+  max_portfolio_risk: 0.02
+  max_position_risk: 0.01
+  max_daily_loss: 1000
+  max_drawdown: 0.15
+  position_sizing_method: kelly
+  enable_trailing_stops: true
+  enable_position_limits: true
+
+features:
+  enable_paper_trading: true
+  enable_live_trading: false
+  enable_ai_signals: true
+  enable_order_flow: true
+  enable_options: true
+  enable_futures: true
+  enable_crypto: true
+  enable_scanner: true
+  enable_strategy_automation: true
+  enable_trade_replay: true
+  enable_workspaces: true
+  enable_marketplace: false
+
+ui:
+  default_theme: dark
+  themes:
+    - dark
+    - light
+    - professional
+  chart_update_interval_ms: 100
+  max_charts_per_workspace: 20
+  enable_hotkeys: true
+  enable_multi_monitor: true
+  enable_cloud_sync: true
+
+logging:
+  level: INFO
+  format: json
+  log_file: logs/apex.log
+  max_file_size_mb: 100
+  backup_count: 10
+  log_trades: true
+  log_orders: true
+  log_websocket: false
+
+performance:
+  websocket_max_connections: 10000
+  websocket_message_queue_size: 1000
+  api_rate_limit_per_minute: 1000
+  chart_data_cache_ttl_seconds: 60
+  enable_gzip_compression: true
+  enable_response_caching: true
